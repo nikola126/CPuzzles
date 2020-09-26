@@ -21,11 +21,12 @@ void operators_1()
     printf("%d\n", x);
 
     x = -3 * 4 % -6 / 5;
-    // -12 % -1
+    // -12 % -6 / 5
+    // 0 / 5
     // 0
     printf("%d\n", x);
 
-    x = (7 + 6) % 5 / 2;
+    x = 7 + 6 % 5 / 2;
     // 13 % 5 / 2
     // 3 / 2
     // 1
@@ -59,9 +60,9 @@ void operators_2()
 
     x == (y = z);
     // x == (4 = 4)
-    // x == 1
-    // 1 == 1
-    // 1
+    // x == 4
+    // 1 == 4
+    // 0 (x = 4)
     printf("X = %d\n", x);
 }
 
@@ -254,54 +255,53 @@ void operators_6()
 
     ++x || ++y && ++z;
     // (x+1) OR y AND z
-    // 2 OR 1 AND 1
-    // 2 OR 1
+    // 2 OR y AND z
     // 1
-    PRINT3(x, y, z); // 2 1 1 ???
+    PRINT3(x, y, z); // 2 1 1 (after OR is ignored, as it doesn't matter)
 
     x = y = z = 1;
     ++x && ++y || ++z;
-    // (x+1) AND y OR z
-    // 2 AND 2 AND 1
-    // 1 AND 1
+    // (x+1) AND y OR z (x = 2)
+    // 2 AND y+1 OR z   (y = 2)
+    // 1 OR ++z         (after OR is ignored, as it doesn't matter)
     // 1
-    PRINT3(x, y, z); // 2 2 1 ???
+    PRINT3(x, y, z); // 2 2 1
 
     x = y = z = 1;
     ++x && ++y && ++z;
-    // (x+1) AND y OR z
-    // 2 AND (y+1) AND z
+    // (x+1) AND y AND z (x = 2)
+    // 2 AND (y+1) AND z (y = 2)
     // 2 AND 2 AND z
     // 1 AND z
-    // 1 AND (z+1)
+    // 1 AND (z+1)       (z = 2)
     // 1
-    PRINT3(x, y, z); // 2 2 2 ???
+    PRINT3(x, y, z); // 2 2 2
 
     x = y = z = -1;
     ++x && ++y || ++z;
-    // (x+1) AND y OR z
-    // 0 AND (y+1) OR z
-    // 0 AND 0 OR z
+    // (x+1) AND y OR z     (x = 0)
+    // 0 AND (y+1) OR z     (AND is evaluated)
     // 0 OR z
-    // 0 OR (z+1)
+    // 0 OR (z+1)           (z = 0)
     // 0
-    PRINT3(x, y, z); // 0 0 0 ???
+    PRINT3(x, y, z); // 0 -1 0 ???
 
     x = y = z = -1;
     ++x || ++y && ++z;
     // x OR y AND z
-    // x OR 0 AND 0
-    // x OR 0
+    // (x+1) OR y AND z     (x = 0)
+    // 0 OR (y+1) AND z     (y = 0)
+    // 0 OR 0 AND z         (AND is evaluated)
     // 0 OR 0
     // 0
-    PRINT3(x, y, z); // 0 0 0 ???
+    PRINT3(x, y, z); // 0 0 -1
 
     x = y = z = -1;
-    ++x&& ++y&& ++z;
-    // 0 AND -1 AND -1
-    // 0 AND -1 ...
-    // 0 AND -1
-    // 0 
+    ++x && ++y && ++z;
+    // (x+1) AND y AND z    (x = 0)
+    // 0 AND y AND z        (AND is evaluated)
+    // 0 AND z              (AND is evaluated)
+    // 0
     PRINT3(x, y, z); // 0 -1 -1
 }
 
