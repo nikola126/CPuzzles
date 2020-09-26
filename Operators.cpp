@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #define PRINT(int) printf("%d\n", int)
+#define PRINT3(x,y,z) printf("x=%d\ty=%d\tz=%d\n",x,y,z)
 
 // Basic Arithmetic Operators
 void operators_1()
@@ -191,11 +192,127 @@ void operators_4()
     PRINT(y);
 }
 
+// Relational and Conditional Operators
+void operators_5()
+{
+    printf("Relational and Conditional Operators\n");
+    int x = 1, y = 1, z = 1;
+
+    x += y += z;
+    // x += (y = y + z) (z = 1)
+    // x += (y = 1 + 1) (y = 2)
+    // x += 2
+    // x = 1 + 2
+    // x = 3            (x = 3)
+    
+    // (x = 3) (y = 2) (z = 1)
+    // 3 < 2 ? 2 : 3
+    PRINT(x < y ? y : x); // 3
+
+    // (x = 3) (y = 2) (z = 1)
+    // 3 < 2? 3 : 2
+    // 2 (y++)
+    // (x = 3) (y = 3) (z = 1)
+    PRINT(x < y ? x++ : y++); // 2
+    PRINT(x); // 3
+    PRINT(y); // 3
+
+    // (x = 3) (y = 3) (z = 1)
+    // z += (x < y ? x++ : y++)
+    // z += (3 < 3 ? x++ : y++)
+    // z += (y++)
+    // z = z + y
+    // z = 1 + 3
+    // z = 4
+    // y = 4
+    PRINT(z += x < y ? x++ : y++); // 4
+    PRINT(y); // 4
+    PRINT(z); // 4
+
+    x = 3; y = z = 4;
+    // (x = 3) (y = 4) (z = 4)
+    // (z >= y >= x)
+    // 4 >= 4 >= 3
+    // 1 >= 3
+    // 0
+    // 0 ? 1 : 0
+    PRINT((z >= y >= x) ? 1 : 0); // 0 !!!
+
+    // (z >= y && y >= x)
+    // 4 >= 4 && 4 >= 3
+    // 1 && 1
+    // 1
+    PRINT(z >= y && y >= x); // 1
+}
+
+// Operator Precedence and Evaluation
+void operators_6()
+{
+    printf("Operator Precedence and Evaluation\n");
+    int x, y, z;
+    x = y = z = 1;
+
+    ++x || ++y && ++z;
+    // (x+1) OR y AND z
+    // 2 OR 1 AND 1
+    // 2 OR 1
+    // 1
+    PRINT3(x, y, z); // 2 1 1 ???
+
+    x = y = z = 1;
+    ++x && ++y || ++z;
+    // (x+1) AND y OR z
+    // 2 AND 2 AND 1
+    // 1 AND 1
+    // 1
+    PRINT3(x, y, z); // 2 2 1 ???
+
+    x = y = z = 1;
+    ++x && ++y && ++z;
+    // (x+1) AND y OR z
+    // 2 AND (y+1) AND z
+    // 2 AND 2 AND z
+    // 1 AND z
+    // 1 AND (z+1)
+    // 1
+    PRINT3(x, y, z); // 2 2 2 ???
+
+    x = y = z = -1;
+    ++x && ++y || ++z;
+    // (x+1) AND y OR z
+    // 0 AND (y+1) OR z
+    // 0 AND 0 OR z
+    // 0 OR z
+    // 0 OR (z+1)
+    // 0
+    PRINT3(x, y, z); // 0 0 0 ???
+
+    x = y = z = -1;
+    ++x || ++y && ++z;
+    // x OR y AND z
+    // x OR 0 AND 0
+    // x OR 0
+    // 0 OR 0
+    // 0
+    PRINT3(x, y, z); // 0 0 0 ???
+
+    x = y = z = -1;
+    ++x&& ++y&& ++z;
+    // 0 AND -1 AND -1
+    // 0 AND -1 ...
+    // 0 AND -1
+    // 0 
+    PRINT3(x, y, z); // 0 -1 -1
+}
+
 int main()
 {
-    //operators_1();
-    //operators_2();
-    //operators_3();
+    printf("Part 1 - Operators\n");
+    operators_1();
+    operators_2();
+    operators_3();
 
     operators_4();
+    operators_5();
+    operators_6();
 }
